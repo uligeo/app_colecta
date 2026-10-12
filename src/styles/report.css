@@ -21,6 +21,7 @@
 .sign-block img { width: 100%; max-width: 240px; }
 .sign-block p { display: flex; flex-direction: column; width: 100%; margin: 0; padding-top: 0.3rem; border-top: 1px solid var(--text); font-size: 0.9rem; }
 .sign-block small { color: var(--muted); }
+.disclaimer { margin-top: 1.5rem; padding-top: 0.75rem; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.75rem; text-align: center; }
 
 @media (max-width: 480px) {
   .report-meta div { font-size: 0.7rem; }

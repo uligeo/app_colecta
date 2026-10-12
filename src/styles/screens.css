@@ -300,3 +300,14 @@
 .spin { animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .spin { animation: none; } }
+
+/* Documentos legales */
+.legal .tabs { padding: 0; margin: 0 0 1rem; background: none; }
+.legal-body { padding: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); line-height: 1.55; font-size: 0.92rem; }
+.legal-body h1 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+.legal-body h2 { font-size: 0.98rem; margin: 1.25rem 0 0.4rem; }
+.legal-body p { margin: 0.5rem 0; }
+.legal-body ul { margin: 0.4rem 0; padding-left: 1.2rem; }
+.legal-body li { margin: 0.25rem 0; }
+.legal-gate { min-height: 100vh; max-width: 680px; margin: 0 auto; padding-bottom: 170px; }
+.legal-actions { grid-template-columns: 1fr; }

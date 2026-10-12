@@ -22,6 +22,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg'],
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,png,svg,webmanifest,md}'],
+      },
       manifest: {
         name: 'NIVELA · Inspección de viviendas',
         short_name: 'NIVELA',

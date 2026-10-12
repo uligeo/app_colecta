@@ -1,12 +1,15 @@
 import { useEffect } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import { FlowLayout, TabLayout } from './components/TabLayout'
-import { useBrand, useProfile } from './db/settings'
+import { useBrand, useLegalAcceptance, useProfile } from './db/settings'
+import { LEGAL_VERSION } from './legal/documents'
 import { applyBrand } from './lib/brand'
 import { BackupPage } from './pages/BackupPage'
 import { Contractors } from './pages/Contractors'
 import { Home } from './pages/Home'
 import { HouseDetail } from './pages/HouseDetail'
+import { Legal } from './pages/Legal'
+import { LegalGate } from './pages/LegalGate'
 import { AreaChecklist } from './pages/inspection/AreaChecklist'
 import { ChecklistStep } from './pages/inspection/ChecklistStep'
 import { FindingNew } from './pages/inspection/FindingNew'
@@ -30,8 +33,11 @@ export default function App() {
 
   useEffect(() => applyBrand(brand), [brand])
 
-  if (profile === undefined) return null
+  const legal = useLegalAcceptance()
+
+  if (profile === undefined || legal === undefined) return null
   if (profile === null) return <Welcome />
+  if (legal?.version !== LEGAL_VERSION) return <LegalGate updated={!!legal} />
 
   return (
     <HashRouter>
@@ -62,6 +68,7 @@ export default function App() {
           <Route path="contratistas/:id/reporte" element={<ContractorReport />} />
           <Route path="respaldo" element={<BackupPage />} />
           <Route path="configuracion" element={<Settings />} />
+          <Route path="legal" element={<Legal />} />
         </Route>
       </Routes>
     </HashRouter>

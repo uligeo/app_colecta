@@ -1,4 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks'
+import type { LegalAcceptance } from '../legal/documents'
 import { db } from './schema'
 
 export interface Profile {
@@ -43,6 +44,11 @@ export async function setSetting<T>(key: string, value: T): Promise<void> {
 /** Perfil local: `undefined` mientras carga y `null` si aún no se ha creado. */
 export function useProfile(): Profile | null | undefined {
   return useLiveQuery(() => getSetting<Profile | null>('profile', null))
+}
+
+/** Aceptación del aviso y los términos: `undefined` mientras carga y `null` si no existe. */
+export function useLegalAcceptance(): LegalAcceptance | null | undefined {
+  return useLiveQuery(() => getSetting<LegalAcceptance | null>('legal', null))
 }
 
 export async function getBrand(): Promise<Brand> {

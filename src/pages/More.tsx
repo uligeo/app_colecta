@@ -1,4 +1,4 @@
-import { Building2, ChevronRight, CloudUpload, HardHat, Info, Palette } from 'lucide-react'
+import { Building2, ChevronRight, CloudUpload, HardHat, Info, Palette, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AppHeader } from '../components/AppHeader'
@@ -9,6 +9,7 @@ const LINKS = [
   { to: '/contratistas', label: 'Contratistas', hint: 'Responsables por especialidad', icon: HardHat },
   { to: '/configuracion', label: 'Configuración', hint: 'Mi firma, nombre de la app, logo y color', icon: Palette },
   { to: '/respaldo', label: 'Respaldo', hint: 'Carpeta local y respaldo de datos', icon: CloudUpload },
+  { to: '/legal', label: 'Privacidad y términos', hint: 'Aviso de privacidad y deslinde de responsabilidad', icon: ShieldCheck },
 ]
 
 export function More() {

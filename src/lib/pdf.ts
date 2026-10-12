@@ -2,6 +2,7 @@ import type { jsPDF as JsPdf } from 'jspdf'
 import { checklistProgress, formatDate, reviewedKeys } from '../db/actions'
 import { areaItems, areaName } from '../db/catalog'
 import { PRIORITY_LABEL, SNAG_STATUS_LABEL, WALK_TYPE_LABEL, type Snag } from '../db/schema'
+import { REPORT_DISCLAIMER } from '../legal/documents'
 import { brandLogoPng } from './brand'
 import type { InspectionData } from './inspectionData'
 
@@ -205,6 +206,8 @@ export async function buildInspectionPdf(d: InspectionData): Promise<Blob> {
   }
   y += 38
   if (walk.confirmed) write('El cliente confirma haber recibido el reporte y conocer los hallazgos identificados.', 8, { color: MUTED })
+  y += 2
+  write(REPORT_DISCLAIMER, 7.5, { color: MUTED })
 
   const pages = doc.getNumberOfPages()
   const issued = new Date().toLocaleDateString('es-MX')

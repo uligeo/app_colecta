@@ -12,6 +12,7 @@ import { areaItems, areaName } from '../db/catalog'
 import { useCatalog } from '../db/checklistStore'
 import { db, SNAG_STATUS_LABEL, WALK_TYPE_LABEL, type Contractor, type House, type Snag } from '../db/schema'
 import { downloadInspectionPdf } from '../lib/inspectionExport'
+import { REPORT_DISCLAIMER } from '../legal/documents'
 import { useObjectUrls } from '../lib/useObjectUrls'
 
 const SEVERITY_ORDER = { alta: 0, media: 1, baja: 2 }
@@ -218,6 +219,7 @@ export function InspectionReport() {
       {walk.confirmed && (
         <p className="muted small center">El cliente confirma haber recibido el reporte y conocer los hallazgos identificados.</p>
       )}
+      <p className="disclaimer">{REPORT_DISCLAIMER}</p>
     </article>
   )
 }

@@ -5,6 +5,14 @@ PWA y aplicación de escritorio para constructoras e inmobiliarias: inspección 
 hallazgo hasta su cierre** (snagging). Funciona **sin conexión**; los datos viven en IndexedDB y se
 respaldan en una copia local (y en Google Drive si se configura).
 
+## Privacidad y términos
+
+- [Aviso de privacidad](public/legal/privacidad.md)
+- [Términos de uso y deslinde de responsabilidad](public/legal/terminos.md)
+
+La aplicación los muestra en **Más → Privacidad y términos** y pide aceptarlos antes del primer uso.
+Al cambiar su contenido, actualiza `LEGAL_VERSION` en `src/legal/documents.ts` para pedir de nuevo la aceptación.
+
 ## Capturas
 
 Datos de ejemplo en un teléfono (390 × 844).
@@ -16,7 +24,7 @@ Datos de ejemplo en un teléfono (390 × 844).
 | <img src="docs/capturas/07-foto-anotada.jpg" width="240" alt="Editor de anotaciones sobre la fotografía"><br>Foto anotada | <img src="docs/capturas/08-hallazgos.jpg" width="240" alt="Paso 3: hallazgos por severidad"><br>Paso 3 · Hallazgos | <img src="docs/capturas/09-firma-cierre.jpg" width="240" alt="Paso 4: firmas del inspector y del cliente"><br>Paso 4 · Firma y cierre |
 | <img src="docs/capturas/10-reporte.jpg" width="240" alt="Reporte de inspección con marca y resumen"><br>Reporte | <img src="docs/capturas/11-reporte-hallazgos.jpg" width="240" alt="Hallazgos del reporte con fotos"><br>Hallazgos del reporte | <img src="docs/capturas/12-pendientes.jpg" width="240" alt="Lista de pendientes con filtros"><br>Pendientes |
 | <img src="docs/capturas/13-seguimiento-hallazgo.jpg" width="240" alt="Seguimiento de un hallazgo"><br>Seguimiento del hallazgo | <img src="docs/capturas/14-plano-vivienda.jpg" width="240" alt="Plano con marcas de hallazgos"><br>Plano con marcas | <img src="docs/capturas/15-editar-checklist.jpg" width="240" alt="Edición del checklist de un área"><br>Editar checklist |
-| <img src="docs/capturas/16-configuracion-marca.jpg" width="240" alt="Configuración de nombre, logo y color"><br>Marca configurable | <img src="docs/capturas/17-respaldo.jpg" width="240" alt="Respaldo local y Google Drive"><br>Respaldo | |
+| <img src="docs/capturas/16-configuracion-marca.jpg" width="240" alt="Configuración de nombre, logo y color"><br>Marca configurable | <img src="docs/capturas/17-respaldo.jpg" width="240" alt="Respaldo local y Google Drive"><br>Respaldo | <img src="docs/capturas/18-privacidad-terminos.jpg" width="240" alt="Aceptación del aviso de privacidad y los términos"><br>Privacidad y términos |
 
 ## Funcionalidades
 

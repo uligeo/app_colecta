@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { Logo } from '../components/Logo'
 import { setSetting } from '../db/settings'
+import { LegalGate } from './LegalGate'
 
 /** Primera ejecución: presentación y creación del perfil local del inspector. */
 export function Welcome() {
-  const [step, setStep] = useState<'intro' | 'perfil'>('intro')
+  const [step, setStep] = useState<'intro' | 'legal' | 'perfil'>('intro')
   const [name, setName] = useState('')
   const [company, setCompany] = useState('')
 
@@ -14,6 +15,8 @@ export function Welcome() {
     await setSetting('profile', { name: name.trim(), company: company.trim() })
   }
 
+  if (step === 'legal') return <LegalGate onAccepted={() => setStep('perfil')} />
+
   return (
     <div className="welcome">
       <div className="welcome-hero">
@@ -22,7 +25,7 @@ export function Welcome() {
       </div>
       {step === 'intro' ? (
         <div className="welcome-actions">
-          <button className="btn primary block" onClick={() => setStep('perfil')}>
+          <button className="btn primary block" onClick={() => setStep('legal')}>
             Comenzar
           </button>
           <p className="welcome-note">Funciona sin internet. Tus datos se guardan en este dispositivo.</p>
