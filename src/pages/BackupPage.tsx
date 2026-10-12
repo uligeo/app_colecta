@@ -1,4 +1,4 @@
-import { CheckCircle2, CloudUpload, ExternalLink, FolderOpen, HardDrive, RotateCcw, Share2, Upload } from 'lucide-react'
+import { CheckCircle2, CloudUpload, ExternalLink, FolderOpen, HardDrive, RotateCcw, Share2, Trash2, Upload } from 'lucide-react'
 import { useState } from 'react'
 import { AppHeader } from '../components/AppHeader'
 import { importBackup } from '../db/backup'
@@ -43,6 +43,12 @@ export function BackupPage() {
       return `Respaldo guardado en ${parts.filter(Boolean).join(' y ')}.`
     })
 
+  async function removeFolder() {
+    await updateBackupSettings({ driveFolderUrl: '' })
+    setDriveFiles(null)
+    setMessage({ kind: 'ok', text: 'Enlace de Drive eliminado.' })
+  }
+
   async function saveFolder() {
     const value = (folderInput ?? '').trim()
     if (value && !parseFolderId(value)) return setMessage({ kind: 'error', text: 'El enlace no parece una carpeta de Google Drive.' })
@@ -85,6 +91,11 @@ export function BackupPage() {
                 <ExternalLink size={16} /> Abrir carpeta
               </a>
             )}
+            {settings.driveFolderUrl && folderInput === null && (
+              <button className="btn ghost sm danger-text" onClick={removeFolder}>
+                <Trash2 size={16} /> Quitar enlace
+              </button>
+            )}
           </div>
           <p className="muted small">
             {settings.driveAt ? <><CheckCircle2 size={14} /> Último respaldo en Drive {timeAgo(settings.driveAt)}</> : 'Sin respaldos en Drive todavía.'}
@@ -106,12 +117,7 @@ export function BackupPage() {
                 <RotateCcw size={16} /> Restaurar desde Drive
               </button>
             </div>
-          ) : (
-            <div className="banner info">
-              La subida automática requiere configurar <code>VITE_GOOGLE_CLIENT_ID</code> (ver README). Mientras tanto
-              usa <b>Compartir</b> y elige Google Drive, o descarga el archivo y súbelo a la carpeta.
-            </div>
-          )}
+          ) : null}
           {driveFiles && driveFiles.length > 0 && (
             <ul className="menu-list">
               {driveFiles.map((f) => (

@@ -73,7 +73,7 @@ export async function getBackupSettings(): Promise<BackupSettings> {
 }
 
 export async function updateBackupSettings(patch: Partial<BackupSettings>): Promise<void> {
-  await setSetting('backup', { ...(await getBackupSettings()), ...patch })
+  await setSetting('backup', { ...(await getSetting<Partial<BackupSettings>>('backup', {})), ...patch })
 }
 
 /** Nombre del inspector para el historial de cambios. */
