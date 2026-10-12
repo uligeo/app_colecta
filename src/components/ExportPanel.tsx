@@ -1,20 +1,29 @@
 import { CloudUpload, ExternalLink, FolderOpen, HardDrive, Share2 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import type { Walk } from '../db/schema'
 import { useBackupSettings } from '../db/settings'
 import { canPickFolder, pickLocalFolder } from '../lib/backupTargets'
-import { folderLink, isDriveConfigured, parseFolderId } from '../lib/drive'
+import { folderLink, isDriveConfigured, parseFolderId, prepareDrive } from '../lib/drive'
 import { saveInspectionLocal, shareInspection, uploadInspectionToDrive } from '../lib/inspectionExport'
 import { timeAgo } from '../lib/time'
 
 type Message = { kind: 'ok' | 'error'; text: string }
 
-/** Guardado del reporte en este equipo (PDF, fotos y firmas); Drive sólo si está configurado. */
+/**
+ * Guardado del reporte (PDF, fotos y firmas) en este equipo.
+ * La subida a Google Drive sólo aparece si la instalación tiene `VITE_GOOGLE_CLIENT_ID`.
+ */
 export function ExportPanel({ walk }: { walk: Walk }) {
   const settings = useBackupSettings()
   const [busy, setBusy] = useState('')
   const [message, setMessage] = useState<Message | null>(null)
-  const driveReady = isDriveConfigured() && !!parseFolderId(settings?.driveFolderUrl ?? '')
+  const hasFolder = !!parseFolderId(settings?.driveFolderUrl ?? '')
+  const driveEnabled = isDriveConfigured()
+
+  useEffect(() => {
+    prepareDrive().catch(() => undefined)
+  }, [])
   const folderName = settings?.localFolderName
 
   async function run(label: string, fn: () => Promise<Message>) {
@@ -80,26 +89,34 @@ export function ExportPanel({ walk }: { walk: Walk }) {
         >
           <Share2 size={16} /> Compartir
         </button>
-        {driveReady && (
+      </div>
+      {driveEnabled && (
+        <>
           <button
             type="button"
-            className="btn sm"
+            className="btn soft block"
             disabled={!!busy}
             onClick={() =>
-              run('drive', async () => {
+              run('Conectando con Google…', async () => {
                 await uploadInspectionToDrive(walk.id, (done, total) => setBusy(`Subiendo ${done}/${total}…`))
-                return { kind: 'ok', text: 'PDF, fotos y firmas subidos a Google Drive.' }
+                return { kind: 'ok', text: 'PDF, fotos y firmas subidos a tu carpeta de Google Drive.' }
               })
             }
           >
-            <CloudUpload size={16} /> {busy.startsWith('Subiendo') ? busy : 'Subir a Drive'}
+            <CloudUpload size={18} /> {busy.startsWith('Subiendo') || busy.startsWith('Conectando') ? busy : walk.driveUploadedAt ? 'Actualizar en Google Drive' : 'Subir a Google Drive'}
           </button>
-        )}
-      </div>
-      {walk.driveFolderId && (
-        <a className="link-btn" href={folderLink(walk.driveFolderId)} target="_blank" rel="noreferrer">
-          Abrir carpeta de la inspección en Drive <ExternalLink size={12} />
-        </a>
+          {!hasFolder && (
+            <p className="muted small">
+              <Link to="/respaldo">Agrega tu carpeta de Google Drive</Link> para subir el reporte.
+            </p>
+          )}
+          {walk.driveUploadedAt && <p className="muted small">Subido a Drive {timeAgo(walk.driveUploadedAt)}</p>}
+          {walk.driveFolderId && (
+            <a className="link-btn" href={folderLink(walk.driveFolderId)} target="_blank" rel="noreferrer">
+              Abrir carpeta de la inspección en Drive <ExternalLink size={12} />
+            </a>
+          )}
+        </>
       )}
       {message && (
         <p className={`toast ${message.kind === 'error' ? 'error' : ''}`} role="status">

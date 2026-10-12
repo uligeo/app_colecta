@@ -43,6 +43,8 @@ let token: { value: string; expiresAt: number } | null = null
 
 export const driveClientId: string = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? ''
 
+export const DRIVE_NOT_ENABLED = 'La subida a Google Drive no está disponible. Guarda el reporte en este equipo.'
+
 export function isDriveConfigured(): boolean {
   return driveClientId.length > 0
 }
@@ -59,36 +61,66 @@ export function parseFolderId(input: string): string | null {
   return /^[\w-]{10,}$/.test(text) ? text : null
 }
 
+let gisPromise: Promise<GoogleOAuth> | null = null
+let tokenClient: TokenClient | null = null
+let pending: { resolve: (t: string) => void; reject: (e: Error) => void }[] = []
+
+function settle(fn: (p: (typeof pending)[number]) => void) {
+  const list = pending
+  pending = []
+  list.forEach(fn)
+}
+
 function loadGis(): Promise<GoogleOAuth> {
   const w = window as unknown as { google?: GoogleOAuth }
   if (w.google?.accounts?.oauth2) return Promise.resolve(w.google)
-  return new Promise((resolve, reject) => {
+  gisPromise ??= new Promise<GoogleOAuth>((resolve, reject) => {
     const script = document.createElement('script')
     script.src = GIS_SRC
     script.async = true
     script.onload = () => (w.google ? resolve(w.google) : reject(new Error('No se pudo cargar Google.')))
-    script.onerror = () => reject(new Error('Sin conexión con Google. Revisa tu internet.'))
+    script.onerror = () => {
+      gisPromise = null
+      reject(new Error('Sin conexión con Google. Revisa tu internet.'))
+    }
     document.head.appendChild(script)
+  })
+  return gisPromise
+}
+
+/**
+ * Carga Google con anticipación. En el teléfono la ventana de permiso sólo se abre si se pide
+ * en el mismo toque del usuario, así que el cliente debe estar listo antes de presionar el botón.
+ */
+export async function prepareDrive(): Promise<void> {
+  if (!isDriveConfigured() || tokenClient) return
+  const google = await loadGis()
+  tokenClient ??= google.accounts.oauth2.initTokenClient({
+    client_id: driveClientId,
+    scope: SCOPE,
+    callback: (r) => {
+      if (r.error) return settle((p) => p.reject(new Error(r.error_description ?? r.error)))
+      token = { value: r.access_token, expiresAt: Date.now() + r.expires_in * 1000 }
+      settle((p) => p.resolve(r.access_token))
+    },
+    error_callback: (e) => settle((p) => p.reject(new Error(e.message ?? 'Autorización cancelada.'))),
   })
 }
 
-/** Obtiene un token de acceso; abre la ventana de autorización de Google si hace falta. */
-export async function getAccessToken(): Promise<string> {
-  if (hasDriveSession()) return token!.value
-  if (!isDriveConfigured()) throw new Error('Falta configurar VITE_GOOGLE_CLIENT_ID.')
-  const google = await loadGis()
+/**
+ * Obtiene un token de acceso; abre la ventana de autorización de Google si hace falta.
+ * Debe llamarse al inicio del manejador del clic, antes de cualquier otra espera.
+ */
+export function getAccessToken(): Promise<string> {
+  if (hasDriveSession()) return Promise.resolve(token!.value)
+  if (!isDriveConfigured()) return Promise.reject(new Error(DRIVE_NOT_ENABLED))
   return new Promise((resolve, reject) => {
-    const client = google.accounts.oauth2.initTokenClient({
-      client_id: driveClientId,
-      scope: SCOPE,
-      callback: (r) => {
-        if (r.error) return reject(new Error(r.error_description ?? r.error))
-        token = { value: r.access_token, expiresAt: Date.now() + r.expires_in * 1000 }
-        resolve(r.access_token)
-      },
-      error_callback: (e) => reject(new Error(e.message ?? 'Autorización cancelada.')),
-    })
-    client.requestAccessToken()
+    pending.push({ resolve, reject })
+    if (pending.length > 1) return
+    if (tokenClient) return tokenClient.requestAccessToken()
+    prepareDrive()
+      .then(() => tokenClient?.requestAccessToken())
+      .catch((e: Error) => settle((p) => p.reject(e)))
   })
 }
 

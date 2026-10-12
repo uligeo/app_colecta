@@ -24,7 +24,7 @@ Datos de ejemplo en un teléfono (390 × 844).
 | <img src="docs/capturas/07-foto-anotada.jpg" width="240" alt="Editor de anotaciones sobre la fotografía"><br>Foto anotada | <img src="docs/capturas/08-hallazgos.jpg" width="240" alt="Paso 3: hallazgos por severidad"><br>Paso 3 · Hallazgos | <img src="docs/capturas/09-firma-cierre.jpg" width="240" alt="Paso 4: firmas del inspector y del cliente"><br>Paso 4 · Firma y cierre |
 | <img src="docs/capturas/10-reporte.jpg" width="240" alt="Reporte de inspección con marca y resumen"><br>Reporte | <img src="docs/capturas/11-reporte-hallazgos.jpg" width="240" alt="Hallazgos del reporte con fotos"><br>Hallazgos del reporte | <img src="docs/capturas/12-pendientes.jpg" width="240" alt="Lista de pendientes con filtros"><br>Pendientes |
 | <img src="docs/capturas/13-seguimiento-hallazgo.jpg" width="240" alt="Seguimiento de un hallazgo"><br>Seguimiento del hallazgo | <img src="docs/capturas/14-plano-vivienda.jpg" width="240" alt="Plano con marcas de hallazgos"><br>Plano con marcas | <img src="docs/capturas/15-editar-checklist.jpg" width="240" alt="Edición del checklist de un área"><br>Editar checklist |
-| <img src="docs/capturas/16-configuracion-marca.jpg" width="240" alt="Configuración de nombre, logo y color"><br>Marca configurable | <img src="docs/capturas/17-respaldo.jpg" width="240" alt="Respaldo local y Google Drive"><br>Respaldo | <img src="docs/capturas/18-privacidad-terminos.jpg" width="240" alt="Aceptación del aviso de privacidad y los términos"><br>Privacidad y términos |
+| <img src="docs/capturas/16-configuracion-marca.jpg" width="240" alt="Configuración de nombre, logo y color"><br>Marca configurable | <img src="docs/capturas/17-respaldo.jpg" width="240" alt="Respaldo local"><br>Respaldo | <img src="docs/capturas/18-privacidad-terminos.jpg" width="240" alt="Aceptación del aviso de privacidad y los términos"><br>Privacidad y términos |
 
 ## Funcionalidades
 
@@ -40,12 +40,11 @@ Datos de ejemplo en un teléfono (390 × 844).
 - **Seguimiento**: contratista sugerido por especialidad, fecha compromiso según severidad, estados
   Abierto → En corrección → Por verificar → Cerrado, fotos de después, historial, vencidos y WhatsApp.
 - **Reporte y PDF real** con marca, fachada, resumen por severidad, hallazgos con fotos, checklist y firmas.
-- **Carpeta compartida de Google Drive**: cada inspección se sube a su propia subcarpeta (PDF, fachada,
-  fotos de hallazgos y firmas) desde el reporte o desde la tarjeta de la inspección; las subidas
-  posteriores actualizan los mismos archivos.
+- **Google Drive (opcional):** oculto mientras no se configure `VITE_GOOGLE_CLIENT_ID`; al activarlo,
+  cada inspección se sube a su propia subcarpeta (ver *Subir a Google Drive*).
 - **Marca configurable**: nombre de la app, logo y color principal (interfaz, reportes y PDF).
 - **Pendientes** globales con filtros y CSV; reportes por contratista; desarrollos con planos y alta masiva.
-- **Respaldo** JSON en Google Drive y en una carpeta local; restauración desde ambos.
+- **Respaldo** JSON en una carpeta local, con restauración desde archivo.
 
 ## Stack
 
@@ -81,26 +80,34 @@ Copia `.env.example` a `.env.local` (ignorado por git) y completa:
 
 | Variable | Descripción |
 | --- | --- |
-| `VITE_GOOGLE_CLIENT_ID` | Cliente OAuth de Google para subir y restaurar respaldos en Drive. Opcional. |
+| `VITE_GOOGLE_CLIENT_ID` | ID de cliente OAuth de Google para **Subir a Drive** (ver abajo). Configúralo en Vercel. |
 | `VITE_DRIVE_FOLDER_URL` | Carpeta de Drive predeterminada; también se puede cambiar en **Más → Respaldo**. |
 | `TAURI_DEV_HOST` | Opcional, solo para desarrollar Tauri en dispositivos móviles. |
 
-## Respaldo en Google Drive
+## Subir a Google Drive
 
-Con solo el enlace de la carpeta no es posible escribir en ella: Google exige que la cuenta autorice la app.
+En la app, cada usuario pega la liga de su carpeta en **Más → Respaldo → Carpeta de Google Drive** y toca
+**Subir a Drive** en la tarjeta de la inspección o en el reporte. La primera vez Google pide iniciar sesión y
+dar permiso; luego se suben el PDF, la fachada, las fotos y las firmas en una subcarpeta por inspección.
 
-1. En [Google Cloud Console](https://console.cloud.google.com/) crea un proyecto y habilita **Google Drive API**.
-2. En **Pantalla de consentimiento de OAuth** elige tipo *Externo*, deja la app en modo *Prueba* y agrega
-   como usuarios de prueba las cuentas que respaldarán.
-3. En **Credenciales → Crear ID de cliente OAuth → Aplicación web**, agrega como *Orígenes de JavaScript
-   autorizados* `http://localhost:5173`, `http://localhost:4173` y el dominio donde publiques la PWA.
-4. Copia el ID en `VITE_GOOGLE_CLIENT_ID` y vuelve a compilar.
+Google no permite escribir en una carpeta sólo con la liga: la app debe estar registrada. Esto lo hace el
+dueño **una sola vez** (unos 5 minutos):
 
-La cuenta que autorice debe tener permiso de edición sobre la carpeta. Se usa el alcance
-`https://www.googleapis.com/auth/drive` para poder escribir en una carpeta existente.
+1. Entra a [Google Cloud Console](https://console.cloud.google.com/), crea un proyecto y en
+   **APIs y servicios → Biblioteca** habilita **Google Drive API**.
+2. En **Pantalla de consentimiento de OAuth** elige *Externo*, captura el nombre de la app y tu correo,
+   y en **Usuarios de prueba** agrega las cuentas de Google que van a subir archivos (hasta 100).
+3. En **Credenciales → Crear credenciales → ID de cliente de OAuth → Aplicación web**, agrega en
+   *Orígenes de JavaScript autorizados* la dirección de la app en Vercel (por ejemplo
+   `https://app-colecta.vercel.app`) y, para desarrollo, `http://localhost:5173`.
+4. Copia el **ID de cliente** y en Vercel ve a **Settings → Environment Variables**: crea
+   `VITE_GOOGLE_CLIENT_ID` con ese valor y vuelve a desplegar (**Deployments → Redeploy**).
+5. Para desarrollo local, ponlo también en `.env.local`.
 
-Sin Client ID la app sigue funcionando: **Subir a Drive** comparte el PDF y las fotos (en el teléfono eliges Drive) o descarga el PDF y abre la carpeta compartida; para los respaldos, **Compartir respaldo** y **Abrir carpeta** funcionan igual. En la app de escritorio (Tauri) el inicio de
-sesión de Google en ventana emergente no está garantizado; ahí usa la copia local.
+La cuenta que inicia sesión debe tener permiso de **edición** sobre la carpeta. Se usa el alcance
+`https://www.googleapis.com/auth/drive`; mientras la app esté en modo *Prueba*, sólo las cuentas agregadas
+como usuarios de prueba pueden autorizarla. En la app de escritorio (Tauri) el inicio de sesión de Google
+no está garantizado; ahí usa la copia local.
 
 **Copia local**: en Chrome y Edge se elige una carpeta del equipo una sola vez y cada respaldo se guarda
 ahí con fecha; en otros navegadores el archivo se descarga. Al finalizar una inspección se hace un respaldo

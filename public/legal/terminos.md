@@ -37,7 +37,7 @@ Las firmas capturadas son **imágenes trazadas en pantalla**. No equivalen a una
 
 ## 7. Servicios de terceros
 
-El autor no es responsable del funcionamiento, la disponibilidad ni las políticas de servicios externos como el alojamiento web, Google Drive, WhatsApp o el sistema operativo del dispositivo.
+El autor no es responsable del funcionamiento, la disponibilidad ni las políticas de servicios externos como el alojamiento web, WhatsApp, los servicios de almacenamiento en la nube que el usuario elija o el sistema operativo del dispositivo.
 
 ## 8. Marca, logos y contenido del usuario
 

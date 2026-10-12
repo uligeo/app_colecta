@@ -34,7 +34,6 @@ Los reportes en PDF, las fotografías, los archivos CSV y los respaldos en JSON 
 La aplicación no integra publicidad, analíticas ni rastreadores. Algunos servicios externos sólo intervienen cuando el usuario los usa:
 
 - **Alojamiento web:** el proveedor que sirve la aplicación (por ejemplo, Vercel) puede registrar datos técnicos de acceso, como dirección IP y tipo de navegador, conforme a su propia política de privacidad.
-- **Google Drive:** sólo si el usuario configura y autoriza su cuenta para subir archivos.
 - **WhatsApp y el menú Compartir del dispositivo:** sólo cuando el usuario decide enviar información por esos medios.
 
 Cada servicio se rige por sus propios términos y avisos de privacidad.

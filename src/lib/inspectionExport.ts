@@ -1,7 +1,17 @@
 import { db } from '../db/schema'
 import { getBackupSettings } from '../db/settings'
 import { saveFilesLocal } from './backupTargets'
-import { ensureSubfolder, folderLink, hasDriveSession, isDriveConfigured, listChildren, parseFolderId, upsertFile } from './drive'
+import {
+  DRIVE_NOT_ENABLED,
+  ensureSubfolder,
+  folderLink,
+  getAccessToken,
+  hasDriveSession,
+  isDriveConfigured,
+  listChildren,
+  parseFolderId,
+  upsertFile,
+} from './drive'
 import { downloadBlob } from './image'
 import { inspectionFolderName, inspectionImages, loadInspection, pdfFileName, type NamedFile } from './inspectionData'
 import { buildInspectionPdf } from './pdf'
@@ -23,9 +33,13 @@ export async function downloadInspectionPdf(walkId: number): Promise<void> {
  * Si la inspección ya se subió, actualiza los archivos existentes en lugar de duplicarlos.
  */
 export async function uploadInspectionToDrive(walkId: number, onProgress?: (done: number, total: number) => void): Promise<string> {
+  // El permiso se pide antes de cualquier espera para que el teléfono no bloquee la ventana de Google.
+  const authorized = getAccessToken()
+  authorized.catch(() => undefined)
+  if (!isDriveConfigured()) throw new Error(DRIVE_NOT_ENABLED)
   const parentId = parseFolderId((await getBackupSettings()).driveFolderUrl)
-  if (!isDriveConfigured()) throw new Error('Falta configurar el acceso a Google Drive (VITE_GOOGLE_CLIENT_ID).')
-  if (!parentId) throw new Error('Configura el enlace de la carpeta compartida en Google Drive y respaldo.')
+  if (!parentId) throw new Error('Agrega tu carpeta de Google Drive en Más → Respaldo.')
+  await authorized
   const { data, files, folder } = await packageFiles(walkId)
   const folderId = await ensureSubfolder(parentId, folder, data.walk.driveFolderId)
   const existing = await listChildren(folderId)
