@@ -51,6 +51,21 @@ export function useLegalAcceptance(): LegalAcceptance | null | undefined {
   return useLiveQuery(() => getSetting<LegalAcceptance | null>('legal', null))
 }
 
+/** Sesión local: `false` tras usar Salir; el perfil se conserva para volver a entrar rápido. */
+export function useSessionActive(): boolean | undefined {
+  return useLiveQuery(async () => (await getSetting<{ active: boolean }>('session', { active: true })).active)
+}
+
+export const setSessionActive = (active: boolean) => setSetting('session', { active })
+
+/** Guarda nombre y empresa; si cambia la persona, descarta la firma guardada de la anterior. */
+export async function saveProfile(name: string, company: string): Promise<void> {
+  const current = await getSetting<Profile | null>('profile', null)
+  const signature = current && current.name === name ? current.signature : undefined
+  await setSetting('profile', { name, company, signature })
+  await setSessionActive(true)
+}
+
 export async function getBrand(): Promise<Brand> {
   return { ...DEFAULT_BRAND, ...(await getSetting<Partial<Brand>>('brand', {})) }
 }

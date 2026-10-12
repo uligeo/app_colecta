@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import { FlowLayout, TabLayout } from './components/TabLayout'
-import { useBrand, useLegalAcceptance, useProfile } from './db/settings'
+import { useBrand, useLegalAcceptance, useProfile, useSessionActive } from './db/settings'
 import { LEGAL_VERSION } from './legal/documents'
 import { applyBrand } from './lib/brand'
 import { BackupPage } from './pages/BackupPage'
@@ -34,9 +34,11 @@ export default function App() {
   useEffect(() => applyBrand(brand), [brand])
 
   const legal = useLegalAcceptance()
+  const session = useSessionActive()
 
-  if (profile === undefined || legal === undefined) return null
+  if (profile === undefined || legal === undefined || session === undefined) return null
   if (profile === null) return <Welcome />
+  if (!session) return <Welcome returning={profile} />
   if (legal?.version !== LEGAL_VERSION) return <LegalGate updated={!!legal} />
 
   return (

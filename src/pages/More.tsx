@@ -1,8 +1,8 @@
-import { Building2, ChevronRight, CloudUpload, HardHat, Info, Palette, ShieldCheck } from 'lucide-react'
+import { Building2, ChevronRight, CloudUpload, HardHat, Info, LogOut, Palette, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AppHeader } from '../components/AppHeader'
-import { updateProfile, useBrand, useProfile } from '../db/settings'
+import { setSessionActive, updateProfile, useBrand, useProfile } from '../db/settings'
 
 const LINKS = [
   { to: '/desarrollos', label: 'Desarrollos y viviendas', hint: 'Alta masiva, planos y estado de obra', icon: Building2 },
@@ -66,6 +66,9 @@ export function More() {
             </li>
           ))}
         </ul>
+        <button type="button" className="btn block logout" onClick={() => setSessionActive(false)}>
+          <LogOut size={18} /> Salir
+        </button>
         <p className="muted small center">
           <Info size={14} /> {brand.name} v{__APP_VERSION__} · Los datos se guardan en este dispositivo.
         </p>

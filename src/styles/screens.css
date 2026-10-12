@@ -126,6 +126,8 @@
 .welcome-form input { background: rgb(255 255 255 / 0.95) !important; color: #0f172a; border-color: transparent !important; }
 .logo-img { object-fit: contain; border-radius: 8px; }
 .welcome .btn.primary { background: var(--primary); border-color: var(--primary); color: var(--primary-text); }
+.welcome .welcome-link { color: #fff; opacity: 0.85; }
+.btn.logout { margin: 1.25rem 0 0.75rem; color: var(--alta); }
 .welcome-note, .welcome-footer { margin: 0; text-align: center; font-size: 0.85rem; opacity: 0.75; }
 
 /* Inicio */
