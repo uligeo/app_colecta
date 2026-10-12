@@ -1,0 +1,37 @@
+.report { padding: 1rem 16px 2rem; }
+.report-toolbar { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.5rem; margin-bottom: 1rem; }
+.report-brand { display: flex; align-items: center; gap: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+.report-brand h1 { font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.3rem; }
+.report-brand p { margin: 0; font-size: 0.88rem; }
+.report-cover { display: block; width: 100%; max-height: 260px; object-fit: cover; border-radius: var(--radius); margin: 1rem 0; }
+.report-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin: 1rem 0 0.5rem; }
+.report-meta div { display: grid; grid-template-columns: auto 1fr; column-gap: 0.35rem; align-items: center; font-size: 0.78rem; color: var(--muted); }
+.report-meta b { grid-column: 1 / -1; color: var(--text); font-size: 0.88rem; }
+.report-finding { padding: 0.75rem 0; border-bottom: 1px solid var(--border); break-inside: avoid; }
+.report-finding-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; }
+.report-finding h3 { font-size: 0.95rem; }
+.report-finding p { margin: 0.25rem 0; }
+.report-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.5rem; }
+.report .photos img { width: 120px; height: 120px; }
+.report-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.report-table td { padding: 0.45rem 0.25rem; border-bottom: 1px solid var(--border); }
+.report-table td:not(:first-child) { text-align: right; }
+.sign-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem; }
+.sign-block { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; text-align: center; break-inside: avoid; }
+.sign-block img { width: 100%; max-width: 240px; }
+.sign-block p { display: flex; flex-direction: column; width: 100%; margin: 0; padding-top: 0.3rem; border-top: 1px solid var(--text); font-size: 0.9rem; }
+.sign-block small { color: var(--muted); }
+
+@media (max-width: 480px) {
+  .report-meta div { font-size: 0.7rem; }
+  .report-meta b { font-size: 0.8rem; }
+  .report-photos { grid-template-columns: 1fr; }
+}
+
+@media print {
+  :root { --bg: #fff; --surface: #fff; --text: #000; --muted: #444; --border: #ccc; color-scheme: light; }
+  .no-print, .tabbar, .bottom-actions, .fab, .photo-del, .photo-add { display: none !important; }
+  .screen { max-width: none; padding: 0; }
+  .tab-shell { padding: 0; }
+  .report { padding: 0; }
+}
