@@ -1,4 +1,4 @@
-import type { jsPDF as JsPdf } from 'jspdf'
+import { jsPDF, type jsPDF as JsPdf } from 'jspdf'
 import { checklistProgress, formatDate, reviewedKeys } from '../db/actions'
 import { areaItems, areaName } from '../db/catalog'
 import { PRIORITY_LABEL, SNAG_STATUS_LABEL, WALK_TYPE_LABEL, type Snag } from '../db/schema'
@@ -54,7 +54,6 @@ function format(img: Img): 'PNG' | 'JPEG' {
 
 /** Genera el PDF del reporte de una inspección. */
 export async function buildInspectionPdf(d: InspectionData): Promise<Blob> {
-  const { jsPDF } = await import('jspdf')
   const doc: JsPdf = new jsPDF({ unit: 'mm', format: 'a4', compress: true })
   let y = M
 
