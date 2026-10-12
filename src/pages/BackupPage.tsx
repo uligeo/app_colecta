@@ -70,7 +70,7 @@ export function BackupPage() {
       <AppHeader title="Respaldo" back="/mas" />
       <div className="content form-stack">
         <p className="muted small">
-          La información vive en este dispositivo. Respáldala en Google Drive (principal) y en una copia local para no perderla.
+          La información vive en este dispositivo. Guarda respaldos en una carpeta del equipo para no perderla y para moverla a otro dispositivo.
         </p>
         <button className="btn primary block" disabled={busy} onClick={() => backupNow(driveReady, true)}>
           <CloudUpload size={18} /> Respaldar ahora{driveReady ? ' (Drive + local)' : ' (local)'}

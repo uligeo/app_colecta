@@ -198,6 +198,8 @@
   text-decoration: none;
 }
 .house-card, .profile-card { flex-wrap: wrap; }
+.house-card .finding-main { flex: 1 1 160px; }
+.house-card .inline-select { flex: 1 1 100%; }
 .finding-main { display: flex; flex-direction: column; gap: 0.15rem; flex: 1; min-width: 0; }
 .finding-main strong { font-size: 0.95rem; overflow: hidden; text-overflow: ellipsis; }
 .finding-main span { font-size: 0.9rem; }

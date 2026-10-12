@@ -3,7 +3,20 @@
 PWA y aplicación de escritorio para constructoras e inmobiliarias: inspección guiada de viviendas
 (checklist por áreas, hallazgos con fotografía anotada, reporte y firma) y **seguimiento de cada
 hallazgo hasta su cierre** (snagging). Funciona **sin conexión**; los datos viven en IndexedDB y se
-respaldan en Google Drive y en una copia local.
+respaldan en una copia local (y en Google Drive si se configura).
+
+## Capturas
+
+Datos de ejemplo en un teléfono (390 × 844).
+
+| | | |
+| :---: | :---: | :---: |
+| <img src="docs/capturas/01-bienvenida.jpg" width="240" alt="Pantalla de bienvenida"><br>Bienvenida | <img src="docs/capturas/02-inicio.jpg" width="240" alt="Inicio con accesos rápidos e inspecciones recientes"><br>Inicio | <img src="docs/capturas/03-datos-vivienda.jpg" width="240" alt="Paso 1: datos de la vivienda"><br>Paso 1 · Datos de la vivienda |
+| <img src="docs/capturas/04-areas-vivienda.jpg" width="240" alt="Paso 2: áreas de la vivienda con avance"><br>Paso 2 · Áreas de la vivienda | <img src="docs/capturas/05-checklist-area.jpg" width="240" alt="Checklist de un área"><br>Checklist por área | <img src="docs/capturas/06-registrar-hallazgo.jpg" width="240" alt="Registro de un hallazgo"><br>Registrar hallazgo |
+| <img src="docs/capturas/07-foto-anotada.jpg" width="240" alt="Editor de anotaciones sobre la fotografía"><br>Foto anotada | <img src="docs/capturas/08-hallazgos.jpg" width="240" alt="Paso 3: hallazgos por severidad"><br>Paso 3 · Hallazgos | <img src="docs/capturas/09-firma-cierre.jpg" width="240" alt="Paso 4: firmas del inspector y del cliente"><br>Paso 4 · Firma y cierre |
+| <img src="docs/capturas/10-reporte.jpg" width="240" alt="Reporte de inspección con marca y resumen"><br>Reporte | <img src="docs/capturas/11-reporte-hallazgos.jpg" width="240" alt="Hallazgos del reporte con fotos"><br>Hallazgos del reporte | <img src="docs/capturas/12-pendientes.jpg" width="240" alt="Lista de pendientes con filtros"><br>Pendientes |
+| <img src="docs/capturas/13-seguimiento-hallazgo.jpg" width="240" alt="Seguimiento de un hallazgo"><br>Seguimiento del hallazgo | <img src="docs/capturas/14-plano-vivienda.jpg" width="240" alt="Plano con marcas de hallazgos"><br>Plano con marcas | <img src="docs/capturas/15-editar-checklist.jpg" width="240" alt="Edición del checklist de un área"><br>Editar checklist |
+| <img src="docs/capturas/16-configuracion-marca.jpg" width="240" alt="Configuración de nombre, logo y color"><br>Marca configurable | <img src="docs/capturas/17-respaldo.jpg" width="240" alt="Respaldo local y Google Drive"><br>Respaldo | |
 
 ## Funcionalidades
 
